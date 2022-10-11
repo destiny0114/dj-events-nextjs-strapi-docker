@@ -72,4 +72,4 @@ $ docker-compose up
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+The Application is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
