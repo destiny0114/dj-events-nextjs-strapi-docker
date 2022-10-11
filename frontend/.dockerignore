@@ -1,0 +1,5 @@
+.next
+out
+.gitignore
+.env.example
+Dockerfile
