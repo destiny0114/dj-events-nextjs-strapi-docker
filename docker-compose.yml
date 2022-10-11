@@ -1,0 +1,63 @@
+version: "3"
+services:
+  web:
+    container_name: web-nginx
+    platform: linux/amd64
+    build: ./nginx
+    ports:
+      - 80:80
+    restart: unless-stopped
+    networks:
+      - app
+  frontend:
+    container_name: frontend
+    platform: linux/amd64
+    build: ./frontend
+    env_file:
+      - ./frontend/.env.local
+    restart: unless-stopped
+    depends_on:
+      - web
+    networks:
+      - app
+  backend:
+    container_name: strapi
+    platform: linux/amd64
+    build: ./backend
+    image: mystrapi:latest
+    restart: unless-stopped
+    env_file:
+      - ./backend/.env
+    volumes:
+      - ./backend/config:/app/config
+      - ./backend/src:/app/src
+      - ./backend/package.json:/app/package.json
+      - ./backend/yarn.lock:/app/yarn.lock # Replace with package-lock.json if using npm
+      - ./backend/.env:/app/.env
+    ports:
+      - 1337:1337
+    networks:
+      - app
+    depends_on:
+      - web
+      - database
+  database:
+    image: postgres:12.0-alpine
+    container_name: strapiDB
+    platform: linux/amd64 #for platform error on Apple M1 chips
+    restart: unless-stopped
+    env_file:
+      - ./backend/.postgres.env
+    volumes:
+      - strapi-data:/var/lib/postgresql/data/ #using a volume
+    ports:
+      - 5432:5432
+    networks:
+      - app
+
+volumes:
+  strapi-data:
+
+networks:
+  app:
+    driver: bridge

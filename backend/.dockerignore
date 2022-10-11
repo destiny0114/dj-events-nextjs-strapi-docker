@@ -1,0 +1,10 @@
+.tmp/
+.cache/
+.git/
+build/
+node_modules/
+data/
+.env
+.env.example
+.postgres.env
+.postgres.env.example
